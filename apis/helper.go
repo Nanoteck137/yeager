@@ -37,3 +37,22 @@ func Body[T types.Body](c echo.Context) (T, error) {
 
 	return res, nil
 }
+
+func RawBody[T types.Body](rawJson string) (T, error) {
+	var res T
+
+	schema := res.Schema()
+
+	d := ([]byte)(rawJson)
+	data, err := jio.ValidateJSON(&d, schema)
+	if err != nil {
+		return res, err
+	}
+
+	err = utils.Decode(data, &res)
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}

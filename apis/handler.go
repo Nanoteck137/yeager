@@ -2,9 +2,9 @@ package apis
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/nanoteck137/pyrin/api"
 	"github.com/nanoteck137/yeager/core"
 	"github.com/nanoteck137/yeager/types"
-	"github.com/nanoteck137/pyrin/api"
 )
 
 type Handler struct {
@@ -23,4 +23,5 @@ type Group interface {
 }
 
 func InstallHandlers(app core.App, g Group) {
+	InstallMusicHandlers(app, g)
 }

@@ -3,8 +3,13 @@ package utils
 import (
 	"strings"
 
+	"github.com/gosimple/slug"
 	"github.com/mitchellh/mapstructure"
 )
+
+func Slug(s string) string {
+	return slug.Make(s)
+}
 
 func SplitString(s string) []string {
 	tags := []string{}
