@@ -14,7 +14,7 @@ require (
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/mattn/go-sqlite3 v1.14.7
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/nanoteck137/pyrin v0.6.2
+	github.com/nanoteck137/pyrin v0.7.0
 	github.com/nrednav/cuid2 v1.0.0
 	github.com/pressly/goose/v3 v3.17.0
 	github.com/spf13/cobra v1.8.0
@@ -27,6 +27,7 @@ require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/fatih/color v1.14.1 // indirect
+	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/google/uuid v1.5.0 // indirect

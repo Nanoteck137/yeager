@@ -38,51 +38,22 @@ type musicApi struct {
 	app core.App
 }
 
-var _ types.Body = (*PostAlbumBodyTrack)(nil)
-
-type PostAlbumBodyTrack struct {
-	Title  string   `json:"title"`
-	Number *int     `json:"number"`
-	Genres []string `json:"genres"`
-	Tags   []string `json:"tags"`
-}
-
-func (PostAlbumBodyTrack) Schema() jio.Schema {
-	return jio.Object().Keys(jio.K{
-		"title":  jio.String().Min(1).Required(),
-		"number": jio.Number().Optional(),
-		"genres": jio.Array().Items(jio.String().Min(1)),
-		"tags":   jio.Array().Items(jio.String().Min(1)),
-	})
-}
-
-func (d PostAlbumBodyTrack) Validate() vld.Errors {
-	errs := vld.Validate(
-		vld.Required(&d.Title).OnError(
-			vld.SetField("title", nil),
-		),
-		vld.When(d.Number != nil).Then(
-			vld.NumGT(d.Number, 1),
-		).OnError(vld.SetField("number", nil)),
-	)
-
-	return errs
-}
-
 var _ types.Body = (*PostAlbumBody)(nil)
 
 type PostAlbumBody struct {
 	Name   string               `json:"name"`
 	Artist string               `json:"artist"`
-	Tracks []PostAlbumBodyTrack `json:"tracks"`
 }
 
 func (PostAlbumBody) Schema() jio.Schema {
 	return jio.Object().Keys(jio.K{
 		"name":   jio.String().Min(1).Required(),
 		"artist": jio.String().Min(1).Required(),
-		"tracks": jio.Array().Items(PostAlbumBodyTrack{}.Schema()),
 	})
+}
+
+type PostAlbum struct {
+	Id string `json:"id"`
 }
 
 func (api *musicApi) HandlePostAlbum(c echo.Context) error {
@@ -92,8 +63,6 @@ func (api *musicApi) HandlePostAlbum(c echo.Context) error {
 	}
 
 	data := form.Value["data"][0]
-	fmt.Printf("data: %v\n", data)
-
 	var body PostAlbumBody
 	err = json.Unmarshal(([]byte)(data), &body)
 	if err != nil {
@@ -106,16 +75,12 @@ func (api *musicApi) HandlePostAlbum(c echo.Context) error {
 		vld.Required(&body.Name).OnError(
 			vld.SetField("name", nil),
 		),
+		vld.Required(&body.Artist).OnError(
+			vld.SetField("artist", nil),
+		),
 	)
 	if errs != nil {
 		return errs
-	}
-
-	for _, track := range body.Tracks {
-		errs := track.Validate()
-		if errs != nil {
-			return errs
-		}
 	}
 
 	db, tx, err := api.app.DB().Begin()
@@ -155,6 +120,7 @@ func (api *musicApi) HandlePostAlbum(c echo.Context) error {
 	pretty.Println(album)
 
 	files := form.File["files"]
+	fmt.Printf("files: %v\n", files)
 
 	workDir := api.app.Config().WorkDir()
 
@@ -164,7 +130,7 @@ func (api *musicApi) HandlePostAlbum(c echo.Context) error {
 		return err
 	}
 
-	for i, f := range files {
+	for _, f := range files {
 		file, err := os.OpenFile(path.Join(albumDir, f.Filename), os.O_RDWR|os.O_CREATE, 0644)
 		if err != nil {
 			return err
@@ -180,13 +146,11 @@ func (api *musicApi) HandlePostAlbum(c echo.Context) error {
 			return err
 		}
 
-		track := body.Tracks[i]
-
-		t, err := db.CreateTrack(ctx, database.CreateTrackParams{
+		// TODO(patrik): Add created_date and maybe updated_date
+		_, err = db.CreateTrack(ctx, database.CreateTrackParams{
 			AlbumId: album.Id,
-			// TODO(patrik): Wrong artist
 			ArtistId:       artist.Id,
-			Title:          track.Title,
+			Title:          f.Filename,
 			CoverArt:       sql.NullString{},
 			TrackNumber:    sql.NullInt64{},
 			Duration:       sql.NullInt64{},
@@ -197,8 +161,6 @@ func (api *musicApi) HandlePostAlbum(c echo.Context) error {
 		if err != nil {
 			return err
 		}
-
-		pretty.Println(t)
 	}
 
 	err = tx.Commit()
@@ -206,7 +168,9 @@ func (api *musicApi) HandlePostAlbum(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, pyrinapi.SuccessResponse(nil))
+	return c.JSON(200, pyrinapi.SuccessResponse(PostAlbum{
+		Id: album.Id,
+	}))
 }
 
 func InstallMusicHandlers(app core.App, group Group) {
@@ -217,8 +181,9 @@ func InstallMusicHandlers(app core.App, group Group) {
 			Name:        "ImportAlbum",
 			Method:      http.MethodPost,
 			Path:        "/music/album",
-			DataType:    nil,
-			BodyType:    nil,
+			DataType:    PostAlbum{},
+			BodyType:    PostAlbumBody{},
+			IsMultiForm: true,
 			HandlerFunc: a.HandlePostAlbum,
 			Middlewares: []echo.MiddlewareFunc{},
 		},

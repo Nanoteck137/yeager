@@ -1,0 +1,44 @@
+{
+  "types": [
+    {
+      "name": "PostAlbum",
+      "extend": "",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "omit": false
+        }
+      ]
+    },
+    {
+      "name": "PostAlbumBody",
+      "extend": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "omit": false
+        },
+        {
+          "name": "artist",
+          "type": "string",
+          "omit": false
+        }
+      ]
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "ImportAlbum",
+      "method": "POST",
+      "path": "/api/v1/music/album",
+      "errorTypes": [
+        "UNKNOWN_ERROR"
+      ],
+      "responseType": "PostAlbum",
+      "bodyType": "PostAlbumBody",
+      "requireFormData": true
+    }
+  ]
+}

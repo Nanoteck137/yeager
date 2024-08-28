@@ -66,11 +66,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1705309234,
-        "narHash": "sha256-uNRRNRKmJyCRC/8y1RqBkqWBLM034y4qN7EprSdmgyA=",
+        "lastModified": 1709126324,
+        "narHash": "sha256-q6EQdSeUZOG26WelxqkmR7kArjgWCdw5sfJVHPH/7j8=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "1ef2e671c3b0c19053962c07dbda38332dcebf26",
+        "rev": "d465f4819400de7c8d874d50b982301f28a84605",
         "type": "github"
       },
       "original": {
@@ -115,13 +115,33 @@
         "type": "github"
       }
     },
+    "gitignore": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1709087332,
+        "narHash": "sha256-HG2cCnktfHsKV0s4XW83gU3F57gaTljL9KNSuG6bnQs=",
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix",
+        "rev": "637db329424fd7e46cf4185293b9cc8c88c95394",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1705677747,
-        "narHash": "sha256-eyM3okYtMgYDgmYukoUzrmuoY4xl4FUujnsv/P6I/zI=",
+        "lastModified": 1709703039,
+        "narHash": "sha256-6hqgQ8OK6gsMu1VtcGKBxKQInRLHtzulDo9Z5jxHEFY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "bbe7d8f876fbbe7c959c90ba2ae2852220573261",
+        "rev": "9df3e30ce24fd28c7b3e2de0d986769db5d6225d",
         "type": "github"
       },
       "original": {
@@ -140,16 +160,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1724808915,
-        "narHash": "sha256-hZstogCaiHSXVLU/hGAmEXo4Ohc5VPdQxbA5MRfCW0g=",
+        "lastModified": 1723756433,
+        "narHash": "sha256-2JelS9rbv/YjQTy7uysVyeOM/AUeVFLcaRA+6H/MyzU=",
         "owner": "nanoteck137",
         "repo": "pyrin",
-        "rev": "4dd88417dde924965053ac30bb2882fea2a29726",
+        "rev": "4a682fdadefb4432891212cd573afae82e9e0fbf",
         "type": "github"
       },
       "original": {
         "owner": "nanoteck137",
-        "ref": "v0.7.0",
+        "ref": "v0.6.5",
         "repo": "pyrin",
         "type": "github"
       }
@@ -158,6 +178,7 @@
       "inputs": {
         "devtools": "devtools",
         "flake-utils": "flake-utils_2",
+        "gitignore": "gitignore",
         "nixpkgs": "nixpkgs",
         "pyrin": "pyrin"
       }

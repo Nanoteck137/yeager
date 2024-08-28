@@ -75,18 +75,8 @@ func main() {
 	}
 
 	data := apis.PostAlbumBody{
-		Name:   "G",
+		Name:   "Highway to Hell",
 		Artist: "Test Artist",
-		Tracks: []apis.PostAlbumBodyTrack{},
-	}
-
-	for i, t := range tracks {
-		data.Tracks = append(data.Tracks, apis.PostAlbumBodyTrack{
-			Title:  t.Title,
-			Number: &i,
-			Genres: nil,
-			Tags:   nil,
-		})
 	}
 
 	w.WriteField("data", JsonString(data))
