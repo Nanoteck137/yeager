@@ -14,16 +14,16 @@ var Commit = "no-commit"
 
 type Config struct {
 	ListenAddr      string `mapstructure:"listen_addr"`
-	LibraryDir      string `mapstructure:"library_dir"`
+	MusicLibraryDir string `mapstructure:"music_library_dir"`
 }
 
 func (c *Config) WorkDir() types.WorkDir {
-	return types.WorkDir(c.LibraryDir)
+	return types.WorkDir(c.MusicLibraryDir)
 }
 
 func setDefaults() {
 	viper.SetDefault("listen_addr", ":3000")
-	viper.BindEnv("library_dir")
+	viper.BindEnv("music_library_dir")
 }
 
 func validateConfig(config *Config) {
@@ -38,7 +38,7 @@ func validateConfig(config *Config) {
 
 	// NOTE(patrik): Has default value, here for completeness
 	validate(config.ListenAddr == "", "listen_addr needs to be set")
-	validate(config.LibraryDir == "", "library_dir needs to be set")
+	validate(config.MusicLibraryDir == "", "music_library_dir needs to be set")
 
 	if hasError {
 		log.Fatal("Config not valid")

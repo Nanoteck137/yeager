@@ -5,7 +5,21 @@ import (
 
 	"github.com/gosimple/slug"
 	"github.com/mitchellh/mapstructure"
+	"github.com/nanoteck137/yeager/core/log"
+	"github.com/nrednav/cuid2"
 )
+
+var CreateId = createIdGenerator(32)
+var CreateShortId = createIdGenerator(8)
+
+func createIdGenerator(length int) func() string {
+	res, err := cuid2.Init(cuid2.WithLength(length))
+	if err != nil {
+		log.Fatal("Failed to create id generator", "err", err)
+	}
+
+	return res
+}
 
 func Slug(s string) string {
 	return slug.Make(s)
